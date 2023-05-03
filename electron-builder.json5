@@ -26,7 +26,8 @@
         ]
       }
     ],
-    "artifactName": "${productName}_${version}.${ext}"
+    "artifactName": "${productName}_${version}.${ext}",
+    "publish": ["github"]
   },
   "nsis": {
     "oneClick": false,
