@@ -4,6 +4,7 @@ import fs from 'fs';
 import Path from 'path';
 import useGlobalState from '@/globalStates';
 import Module from './Module';
+import CommitModal from './CommitModal';
 
 const Modules = () => {
   const [modules, setModules] = useState<string[]>([]);

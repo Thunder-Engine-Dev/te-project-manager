@@ -10,7 +10,6 @@ const CreateModal = (p: { open: boolean, onClose: () => void }) => {
 
   const [projectName, setProjectName] = useState('');
   const [projectPath, setProjectPath] = useState('');
-  const [useViewport, setUseViewport] = useState(false);
 
   const [savedProjects, setSavedProjects] = useLocalStorageState<string[]>('projects', { defaultValue: [] });
 
@@ -20,7 +19,8 @@ const CreateModal = (p: { open: boolean, onClose: () => void }) => {
     <Modal open={ p.open } onClose={ () => !isCreating && p.onClose() }>
       <ModalDialog>
         <ModalClose />
-        <Typography component="h2">New Project</Typography>
+        <Typography component="h2">New Local Project</Typography>
+        <Typography>Warning! Use this only if you are not planning to collaborate with people. This will create a local project without ability to collaborate. It's recommended to create a Github repository instead using the Thunder Engine Template.</Typography>
         <form onSubmit={ createProject }>
           <Stack spacing={ 2 }>
             <FormControl sx={{ marginTop: 2 }}>
@@ -33,20 +33,6 @@ const CreateModal = (p: { open: boolean, onClose: () => void }) => {
                 A folder for your project will be created.
               </>} sx={{ zIndex: 9999 }} placement='top'>
                 <Input required sx={{ flexGrow: 1 }} onChange={ (event) => setProjectPath(event.target.value.replaceAll('"', '')) } />
-              </Tooltip>
-            </FormControl>
-            <FormControl>
-              <Tooltip title={<>
-                This module includes basic MF enemies, powerups, etc.
-              </>} sx={{ zIndex: 9999 }} placement='top'>
-                <Checkbox label='Preinstall the Base Module' defaultChecked disabled />
-              </Tooltip>
-            </FormControl>
-            <FormControl>
-              <Tooltip title={<>
-                This module implements the proper viewport-based scaling with a shader.
-              </>} sx={{ zIndex: 9999 }} placement='top' defaultChecked>
-                <Checkbox label='Preinstall the Viewport Module' onChange={ (event) => setUseViewport(event.target.checked) } />
               </Tooltip>
             </FormControl>
             <Button type='submit' loading={ isCreating }>Create</Button>
@@ -71,11 +57,6 @@ const CreateModal = (p: { open: boolean, onClose: () => void }) => {
 
       await git.clone('https://github.com/Thunder-Engine-Dev/te-template.git', projectName, ['--recurse-submodules']);
       git = simpleGit(Path.join(projectPath, projectName));
-
-      setCreationStatus('Fetching the modules');
-
-      if (useViewport)
-        await git.submoduleAdd('https://github.com/Thunder-Engine-Dev/te-module-viewport', './modules/viewport');
     } catch (error) {
       console.log(error);
       setCreationStatus(`Failed: ${ error }`);

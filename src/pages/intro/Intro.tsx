@@ -72,7 +72,9 @@ const Intro = () => {
 
           {
             savedProjects.length === 0 && (
-              <Typography sx={{ margin: 2, textAlign: 'center' }}>You don't have any recent projects right now. :sadfrog:</Typography>
+              <Typography sx={{ margin: 2, textAlign: 'center' }}>
+                You don't have any recent projects right now. <img width={ 24 } src="https://cdn.discordapp.com/emojis/795330334316691477.webp?size=96&quality=lossless" />
+              </Typography>
             )
           }
         </List>

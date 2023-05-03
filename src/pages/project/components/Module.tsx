@@ -20,10 +20,12 @@ const Module = (p: { info: any, id: string, local: boolean, onUpdateRequest?: ()
     loadUpdate();
   }, []);
 
+  if (!p.info) return null;
+
   return (
     <>
       <ListItem sx={{ justifyContent: 'space-between' }}>
-        <Box sx={{ flexDirection: 'column', display: 'flex' }}>
+        <Box sx={{ flexDirection: 'column', display: 'flex', ...(p.info.authors ? { height: 48 } : {}) }}>
           <Typography>{ p.info.name } <Typography textColor="text.tertiary">{ !p.engine ? `modules/${ p.id }` : p.id }</Typography></Typography>
           { !infoVisible && p.info.authors && <Typography textColor="text.tertiary">{ p.info.authors.map((a: string) => repo.contributors[a].username).join(', ') }</Typography> }
         </Box>
@@ -42,13 +44,13 @@ const Module = (p: { info: any, id: string, local: boolean, onUpdateRequest?: ()
           ) }
           { !p.local && !p.engine && (
             <Tooltip title='Add to the project'>
-              <Button onClick={ buttonAddModule } loading={ loading } sx={{ paddingInline: 1 }}><Add /></Button>
+              <Button onClick={ buttonAddModule } loading={ loading } sx={{ paddingInline: 1, width: 42 }}><Add /></Button>
             </Tooltip>
           ) }
         </Box>
       </ListItem>
       { infoVisible && (
-        <Box sx={{ margin: 2 }}>
+        <Box sx={{ margin: 2, marginTop: -1 }}>
           <Typography component="h1">Information</Typography>
           <Typography>{ p.info.description }</Typography>
           { p.info.authors && <Typography component="h1" sx={{ marginTop: 2 }}>Authors</Typography> }
@@ -89,6 +91,7 @@ const Module = (p: { info: any, id: string, local: boolean, onUpdateRequest?: ()
     await updateModule(p.id, p.project, !!p.engine);
 
     setUpdating(false);
+    setUpdateAvailable(false);
     await loadUpdate();
     if (p.onUpdateRequest) p.onUpdateRequest();
   }
