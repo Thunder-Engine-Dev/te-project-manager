@@ -16,31 +16,31 @@
     "e2e": "npx playwright test"
   },
   "devDependencies": {
-    "@playwright/test": "^1.29.2",
-    "@types/react": "^18.0.27",
-    "@types/react-dom": "^18.0.10",
-    "@vitejs/plugin-react": "^3.0.1",
-    "electron": "^22.0.3",
-    "electron-builder": "^23.6.0",
+    "@playwright/test": "^1.41.1",
+    "@types/react": "^18.2.51",
+    "@types/react-dom": "^18.2.18",
+    "@vitejs/plugin-react": "^4.2.1",
+    "electron": "^28.2.1",
+    "electron-builder": "^24.9.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "sass": "^1.57.1",
-    "typescript": "^4.9.4",
-    "vite": "^4.0.4",
-    "vite-electron-plugin": "^0.7.4",
-    "vite-plugin-electron-renderer": "^0.11.4"
+    "sass": "^1.70.0",
+    "typescript": "^5.3.3",
+    "vite": "^5.0.12",
+    "vite-electron-plugin": "^0.8.3",
+    "vite-plugin-electron-renderer": "^0.14.5"
   },
   "engines": {
     "node": "^14.18.0 || >=16.0.0"
   },
   "dependencies": {
-    "@emotion/react": "^11.10.5",
-    "@emotion/styled": "^11.10.5",
-    "@mui/icons-material": "^5.11.0",
-    "@mui/joy": "^5.0.0-alpha.65",
-    "@mui/material": "^5.11.7",
+    "@emotion/react": "^11.11.3",
+    "@emotion/styled": "^11.11.0",
+    "@mui/icons-material": "^5.15.7",
+    "@mui/joy": "5.0.0-beta.25",
+    "@mui/material": "^5.15.7",
     "react-hooks-global-state": "^2.1.0",
-    "simple-git": "^3.16.0",
-    "use-local-storage-state": "^18.1.2"
+    "simple-git": "^3.22.0",
+    "use-local-storage-state": "^19.1.0"
   }
 }

@@ -12,6 +12,29 @@ const ModuleAddModal = (p: { open: boolean, onClose: () => void }) => {
 
   const [importing, setImporting] = useState(false);
 
+  const importModule = async () => {
+    if (!repo) return;
+
+    setImporting(true);
+
+    let failed = false;
+
+    try {
+      const git = simpleGit(repo);
+
+      const output = await git.submoduleAdd(url, Path.join(repo, 'modules', folder));
+
+      console.log(output);
+    } catch (error) {
+      setStatus(`Failed: ${ error }`);
+      failed = true;
+    }
+
+    if (!failed) p.onClose();
+
+    setImporting(false);
+  }
+
   return (
     <Modal open={ p.open } onClose={ () => !importing && p.onClose() }>
       <ModalDialog>
@@ -34,27 +57,6 @@ const ModuleAddModal = (p: { open: boolean, onClose: () => void }) => {
       </ModalDialog>
     </Modal>
   )
-
-  async function importModule() {
-    setImporting(true);
-
-    let failed = false;
-
-    try {
-      const git = simpleGit(repo);
-
-      const output = await git.submoduleAdd(url, Path.join(repo, 'modules', folder));
-
-      console.log(output);
-    } catch (error) {
-      setStatus(`Failed: ${ error }`);
-      failed = true;
-    }
-
-    if (!failed) p.onClose();
-
-    setImporting(false);
-  }
 }
 
 export default ModuleAddModal;

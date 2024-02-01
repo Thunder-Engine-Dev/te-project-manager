@@ -1,11 +1,11 @@
 import { Box, List, ListDivider, ListItemButton, Typography } from '@mui/joy';
-import { useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import simpleGit from 'simple-git';
 import Path from 'path';
 import useGlobalState from '@/globalStates';
 import CommitModal from './CommitModal';
 
-const GitActions = () => {
+const GitActions: FC = () => {
   const [lcommit, setLcommit] = useState<string | null>(null);
   const [updateAvailable, setUpdateAvailable] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -14,6 +14,35 @@ const GitActions = () => {
   const [pullLoading, setPullLoading] = useState(false);
   const [commitlog, setCommitlog] = useState<any[]>([]);
   const [pushModalOpen, setPushModalOpen] = useState(false);
+
+  const loadUpdate = async () => {
+    const git = simpleGit(currentProject);
+
+    const log = await git.raw('rev-parse', '--short', 'HEAD');
+    setLcommit(log);
+
+    setLoading(false);
+    
+    let commits = (await git.raw('log', 'origin', '-20')).split('commit').splice(1);
+
+    console.log(commits);
+
+    setCommitlog(
+      commits.map(commit => ({
+        author: commit.split('Author: ')[1].split('<')[0],
+        date: commit.split('Date: ')[1].split('\n')[0],
+        name: commit.split('Date: ')[1].split('\n')[2].split('\n')[0].trim(),
+        new: commit.includes('origin')
+      }))
+    );
+
+    await git.fetch();
+    const upd = await git.raw('rev-list', 'HEAD...origin', '--count');
+
+    if (upd) setUpdateAvailable(true);
+
+    setLoadingRemote(false);
+  }
 
   useEffect(() => {
     loadUpdate();
@@ -127,35 +156,6 @@ const GitActions = () => {
       ) }
     </>
   );
-
-  async function loadUpdate() {
-    const git = simpleGit(currentProject);
-
-    const log = await git.raw('rev-parse', '--short', 'HEAD');
-    setLcommit(log);
-
-    setLoading(false);
-    
-    let commits = (await git.raw('log', 'origin', '-20')).split('commit').splice(1);
-
-    console.log(commits);
-
-    setCommitlog(
-      commits.map(commit => ({
-        author: commit.split('Author: ')[1].split('<')[0],
-        date: commit.split('Date: ')[1].split('\n')[0],
-        name: commit.split('Date: ')[1].split('\n')[2].split('\n')[0].trim(),
-        new: commit.includes('origin')
-      }))
-    );
-
-    await git.fetch();
-    const upd = await git.raw('rev-list', 'HEAD...origin', '--count');
-
-    if (upd) setUpdateAvailable(true);
-
-    setLoadingRemote(false);
-  }
 }
 
 export default GitActions;

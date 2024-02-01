@@ -6,6 +6,11 @@ const ImportLocalModal = (p: { open: boolean, onClose: () => void }) => {
   const [projectPath, setProjectPath] = useState('');
   const [savedProjects, setSavedProjects] = useLocalStorageState<string[]>('projects', { defaultValue: [] });
 
+  const importProject = (event: FormEvent) => {
+    setSavedProjects([ projectPath.replaceAll('"', ''), ...savedProjects ]);
+    p.onClose();
+  }
+
   return (
     <Modal open={ p.open } onClose={ p.onClose }>
       <ModalDialog>
@@ -22,12 +27,7 @@ const ImportLocalModal = (p: { open: boolean, onClose: () => void }) => {
         </form>
       </ModalDialog>
     </Modal>
-  )
-
-  function importProject(event: FormEvent) {
-    setSavedProjects([ projectPath.replaceAll('"', ''), ...savedProjects ]);
-    p.onClose();
-  }
+  );
 }
 
 export default ImportLocalModal;

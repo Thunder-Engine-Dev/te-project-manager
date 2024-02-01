@@ -10,6 +10,11 @@ const ModuleBrowser = () => {
   const [currentProject] = useGlobalState('currentProject');
   const [repo] = useGlobalState('repo');
 
+  const updateModules = () => {
+    const dir = fs.readdirSync(Path.join(currentProject, 'modules'));
+    setModules(dir);
+  }
+
   useEffect(updateModules, []);
 
   return (
@@ -27,7 +32,7 @@ const ModuleBrowser = () => {
           margin: 2
         }}
       >
-        { repo.plugins.map((module: any) => (
+        { repo?.plugins.map((module: any) => (
           <>
             <Module
               info={ module }
@@ -42,12 +47,6 @@ const ModuleBrowser = () => {
       </List>
     </>
   );
-
-  function updateModules() {
-    const dir = fs.readdirSync(Path.join(currentProject, 'modules'));
-
-    setModules(dir);
-  }
 }
 
 export default ModuleBrowser;

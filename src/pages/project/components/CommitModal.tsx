@@ -11,6 +11,26 @@ const CommitModal = (p: { open: boolean, onClose: () => void }) => {
   const [name, setName] = useState('');
   const [force, setForce] = useState(false);
 
+  const createProject = async (event: FormEvent) => {
+    event.preventDefault();
+
+    let failed = false;
+
+    setIsCreating(true);
+
+    try {
+      let git = simpleGit(repo);
+
+      
+    } catch (error) {
+      console.log(error);
+      setCreationStatus(`Failed: ${ error }`);
+      failed = true;
+    }
+
+    setIsCreating(false);
+  }
+
   return (
     <Modal open={ p.open } onClose={ () => !isCreating && p.onClose() }>
       <ModalDialog>
@@ -36,26 +56,6 @@ const CommitModal = (p: { open: boolean, onClose: () => void }) => {
       </ModalDialog>
     </Modal>
   );
-
-  async function createProject(event: FormEvent) {
-    event.preventDefault();
-
-    let failed = false;
-
-    setIsCreating(true);
-
-    try {
-      let git = simpleGit(repo);
-
-      
-    } catch (error) {
-      console.log(error);
-      setCreationStatus(`Failed: ${ error }`);
-      failed = true;
-    }
-
-    setIsCreating(false);
-  }
 }
 
 export default CommitModal;

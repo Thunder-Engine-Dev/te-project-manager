@@ -10,6 +10,21 @@ const Project = (p: { path: string }) => {
 
   const [currentProject, setCurrentProject] = useGlobalState('currentProject');
 
+  const getRealProjectName = () => {
+    try {
+      const projectFileContent = fs.readFileSync(Path.join(p.path, 'project.godot'), 'utf8');
+      return projectFileContent.split('config/name="')[1].split('"')[0];
+    } catch {
+      return 'Failed to process the project name'
+    }
+  }
+
+  const remove = () => {
+    const projects = [ ...savedProjects ];
+    projects.splice(projects.indexOf(p.path), 1);
+    setSavedProjects(projects);
+  }
+
   return (
     <>
       <ListItem sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', gap: 2 }}>
@@ -26,21 +41,6 @@ const Project = (p: { path: string }) => {
       </ListItem>
     </>
   );
-
-  function remove() {
-    const projects = [ ...savedProjects ];
-    projects.splice(projects.indexOf(p.path), 1);
-    setSavedProjects(projects);
-  }
-
-  function getRealProjectName() {
-    try {
-      const projectFileContent = fs.readFileSync(Path.join(p.path, 'project.godot'), 'utf8');
-      return projectFileContent.split('config/name="')[1].split('"')[0];
-    } catch {
-      return 'Failed to process the project name'
-    }
-  }
 }
 
 export default Project;

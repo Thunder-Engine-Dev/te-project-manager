@@ -5,11 +5,21 @@ import Path from 'path';
 import useGlobalState from '@/globalStates';
 import Module from './Module';
 import CommitModal from './CommitModal';
+import { unknownPlugin } from '@/globalTypes';
 
 const Modules = () => {
   const [modules, setModules] = useState<string[]>([]);
   const [currentProject] = useGlobalState('currentProject');
   const [repo] = useGlobalState('repo');
+
+  const updateModules = () => {
+    const dir = fs.readdirSync(Path.join(currentProject, 'modules')).filter((m: string) => !m.startsWith('.'));
+    setModules(dir);
+  }
+
+  const findModuleInfo = (id: string) => {
+    return repo?.plugins.find((m: any) => m.id === id) || unknownPlugin(id);
+  }
 
   useEffect(updateModules, []);
 
@@ -53,16 +63,6 @@ const Modules = () => {
       </List>
     </>
   );
-
-  function updateModules() {
-    const dir = fs.readdirSync(Path.join(currentProject, 'modules'));
-
-    setModules(dir);
-  }
-
-  function findModuleInfo(id: string) {
-    return repo.plugins.find((m: any) => m.id === id) || null;
-  }
 }
 
 export default Modules;

@@ -1,8 +1,10 @@
+import { GlobalState } from '@/globalTypes';
 import { createGlobalState } from 'react-hooks-global-state';
 
-const { useGlobalState } = createGlobalState({
+
+const { useGlobalState } = createGlobalState<GlobalState>({
   currentProject: '',
   repo: null
-} as any);
+});
 
 export default useGlobalState;

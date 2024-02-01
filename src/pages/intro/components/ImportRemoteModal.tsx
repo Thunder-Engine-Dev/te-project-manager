@@ -11,6 +11,26 @@ const ImportRemoteModal = (p: { open: boolean, onClose: () => void }) => {
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState('');
 
+  const importProject = async (event: FormEvent) => {
+    event.preventDefault();
+    let failed = false;
+    //setSavedProjects([ projectUrl.replaceAll('"', ''), ...savedProjects ]);
+    setLoading(true);
+    try {
+      const git = simpleGit(projectPath);
+      await git.clone(projectUrl, '.', ['--recurse-submodules']);
+    } catch (error) {
+      failed = true;
+      setStatus(error as string);
+    }
+
+    setLoading(false);
+    if (!failed) {
+      setSavedProjects([ projectPath, ...savedProjects ]);
+      p.onClose();
+    }
+  }
+
   return (
     <Modal open={ p.open } onClose={ () => !loading && p.onClose() }>
       <ModalDialog>
@@ -33,26 +53,6 @@ const ImportRemoteModal = (p: { open: boolean, onClose: () => void }) => {
       </ModalDialog>
     </Modal>
   );
-
-  async function importProject(event: FormEvent) {
-    event.preventDefault();
-    let failed = false;
-    //setSavedProjects([ projectUrl.replaceAll('"', ''), ...savedProjects ]);
-    setLoading(true);
-    try {
-      const git = simpleGit(projectPath);
-      await git.clone(projectUrl, '.', ['--recurse-submodules']);
-    } catch (error) {
-      failed = true;
-      setStatus(error as string);
-    }
-
-    setLoading(false);
-    if (!failed) {
-      setSavedProjects([ projectPath, ...savedProjects ]);
-      p.onClose();
-    }
-  }
 }
 
 export default ImportRemoteModal;

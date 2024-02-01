@@ -8,6 +8,13 @@ function App() {
   const [currentProject] = useGlobalState('currentProject');
   const [repo, setRepo] = useGlobalState('repo');
 
+  const fetchRepo = async () => {
+    const res = await (await fetch('https://thunder-engine-dev.github.io/te-modules/build.json')).json();
+    setRepo(res);
+
+    console.log('repo has been updated', res);
+  }
+
   useEffect(() => { fetchRepo() }, []);
 
   return (
@@ -16,14 +23,6 @@ function App() {
       { currentProject && <Project /> }
     </CssVarsProvider>
   );
-
-  async function fetchRepo() {
-    const res = await (await fetch('https://thunder-engine-dev.github.io/te-modules/build.json')).json();
-
-    setRepo(res);
-
-    console.log('repo has been updated', res);
-  }
 }
 
 export default App;

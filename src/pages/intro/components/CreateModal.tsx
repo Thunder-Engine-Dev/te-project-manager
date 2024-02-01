@@ -13,7 +13,34 @@ const CreateModal = (p: { open: boolean, onClose: () => void }) => {
 
   const [savedProjects, setSavedProjects] = useLocalStorageState<string[]>('projects', { defaultValue: [] });
 
-  // <Button variant='outlined'><FolderOpenOutlined /></Button>
+  const createProject = async (event: FormEvent) => {
+    event.preventDefault();
+
+    let failed = false;
+
+    setIsCreating(true);
+
+    try {
+      let git = simpleGit(projectPath);
+
+      setCreationStatus('Fetching the template');
+
+      await git.clone('https://github.com/Thunder-Engine-Dev/te-template.git', projectName, ['--recurse-submodules']);
+      git = simpleGit(Path.join(projectPath, projectName));
+    } catch (error) {
+      console.log(error);
+      setCreationStatus(`Failed: ${ error }`);
+      failed = true;
+    }
+
+    if (!failed) {
+      setSavedProjects([ Path.join(projectPath.replaceAll('"', ''), projectName), ...savedProjects ]);
+      p.onClose();
+      setCreationStatus('');
+    }
+
+    setIsCreating(false);
+  }
 
   return (
     <Modal open={ p.open } onClose={ () => !isCreating && p.onClose() }>
@@ -42,35 +69,6 @@ const CreateModal = (p: { open: boolean, onClose: () => void }) => {
       </ModalDialog>
     </Modal>
   );
-
-  async function createProject(event: FormEvent) {
-    event.preventDefault();
-
-    let failed = false;
-
-    setIsCreating(true);
-
-    try {
-      let git = simpleGit(projectPath);
-
-      setCreationStatus('Fetching the template');
-
-      await git.clone('https://github.com/Thunder-Engine-Dev/te-template.git', projectName, ['--recurse-submodules']);
-      git = simpleGit(Path.join(projectPath, projectName));
-    } catch (error) {
-      console.log(error);
-      setCreationStatus(`Failed: ${ error }`);
-      failed = true;
-    }
-
-    if (!failed) {
-      setSavedProjects([ Path.join(projectPath.replaceAll('"', ''), projectName), ...savedProjects ]);
-      p.onClose();
-      setCreationStatus('');
-    }
-
-    setIsCreating(false);
-  }
 }
 
 export default CreateModal;

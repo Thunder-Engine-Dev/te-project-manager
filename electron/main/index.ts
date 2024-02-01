@@ -30,6 +30,7 @@ if (!app.requestSingleInstanceLock()) {
 }
 
 app.commandLine.appendSwitch('--enable-features', 'OverlayScrollbar')
+app.commandLine.appendSwitch('--ozone-platform-hint', 'auto');
 
 // Remove electron security warnings
 // This warning only shows in development mode
