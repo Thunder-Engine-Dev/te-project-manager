@@ -8,6 +8,7 @@ const ModuleAddModal = (p: { open: boolean, onClose: () => void }) => {
   const [url, setUrl] = useState('');
   const [folder, setFolder] = useState('');
   const [repo] = useGlobalState('repo');
+  const [currentProject] = useGlobalState('currentProject');
   const [status, setStatus] = useState('');
 
   const [importing, setImporting] = useState(false);
@@ -20,9 +21,8 @@ const ModuleAddModal = (p: { open: boolean, onClose: () => void }) => {
     let failed = false;
 
     try {
-      const git = simpleGit(repo);
-
-      const output = await git.submoduleAdd(url, Path.join(repo, 'modules', folder));
+      const git = simpleGit(currentProject);
+      const output = await git.submoduleAdd(url, Path.join(currentProject, 'modules', folder));
 
       console.log(output);
     } catch (error) {

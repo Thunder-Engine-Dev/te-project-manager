@@ -21,7 +21,7 @@ const CommitModal = (p: { open: boolean, onClose: () => void }) => {
     try {
       let git = simpleGit(repo);
 
-      
+      throw new Error('commiting is not implemented');
     } catch (error) {
       console.log(error);
       setCreationStatus(`Failed: ${ error }`);

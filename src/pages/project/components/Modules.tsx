@@ -41,7 +41,7 @@ const Modules = () => {
         <Module
           info={{
             name: 'Thunder Engine Core'
-          }}
+          } as any}
           id="engine"
           local={ true }
           engine={ true }
