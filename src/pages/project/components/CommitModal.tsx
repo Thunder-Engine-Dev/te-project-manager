@@ -19,7 +19,7 @@ const CommitModal = (p: { open: boolean, onClose: () => void }) => {
     setIsCreating(true);
 
     try {
-      let git = simpleGit(repo);
+      //let git = simpleGit(repo);
 
       throw new Error('commiting is not implemented');
     } catch (error) {

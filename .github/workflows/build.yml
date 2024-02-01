@@ -19,9 +19,9 @@ jobs:
         sudo apt update
         sudo apt install wine32
         echo "WINE_PATH=$(which wine64)" >> $GITHUB_OUTPUT
-    - run: npm i -g yarn
-    - run: yarn
-    - run: yarn build -w -p always
+    - run: npm i -g pnpm
+    - run: pnpm i
+    - run: pnpm build -w -p always
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
